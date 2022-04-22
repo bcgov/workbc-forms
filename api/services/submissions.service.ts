@@ -11,10 +11,12 @@ export const getFormSubmissions = async (body: any, formPass: string) => {
             },
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
+            params: params
         }
-        const formSubmissionResponse = await chefsApi.post(url, params, config)
-        return formSubmissionResponse
+        const formSubmissionResponse = await chefsApi.get(url, config)
+        console.log(formSubmissionResponse)
+        return formSubmissionResponse.data
     } catch (e : any) {
         console.log(e)
         throw new Error(e.response?.status)
