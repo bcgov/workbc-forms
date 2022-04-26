@@ -45,19 +45,3 @@ INSERT INTO FormsCreated VALUES (
   'asmith',
   current_timestamp
 )
-
-CREATE TABLE FormsCreated (
-   Id SERIAL PRIMARY KEY,
-   FormKey VARCHAR(30) NOT NULL,
-   FormTemplateId INTEGER NOT NULL,
-   VersionNo INTEGER NOT NULL,
-   CatchmentNo INTEGER NOT NULL,
-   StoreFrontName VARCHAR(60),   
-   IsCreated BOOLEAN NOT NULL,
-   IsInICM BOOLEAN NOT NULL,   
-   IsCompleted BOOLEAN NOT NULL,
-   FormData JSONB,
-   CreatedBy VARCHAR(128),
-   DateCreated TIMESTAMP NOT NULL
- );
-
