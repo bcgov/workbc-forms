@@ -10,6 +10,40 @@ INSERT INTO FormTemplates VALUES (
   'https://forms-dev.es.workbc.ca/app/form/submit?f=a8cc0e8c-1d63-4022-bfa1-7b99fea4edc8 ',
   true,
   '{        
+        "formname" : "Sample Form" 
+  }',
+  current_timestamp
+);
+
+
+TRUNCATE TABLE FormsCreated RESTART IDENTITY;
+
+INSERT INTO FormsCreated VALUES (
+  DEFAULT,
+  'a8cc0e8c-1d63-4022-bfa1-7b99fea4edc8',
+  1, /* FormTemplateId */
+  1, /* VersionNo */
+  1, /* CatchmentNo */
+  'Port Hardy',
+  false, /* IsCreated */
+  false, /* IsInICM */
+  false, /* IsCompleted */
+  null,
+  'USERA',
+   current_timestamp
+);
+
+INSERT INTO FormsCreated VALUES (
+  DEFAULT,
+  'a8cc0e8c-1d63-4022-bfa1-7b99fea4edc9',
+  1, /* FormTemplateId */
+  1, /* VersionNo */
+  1, /* CatchmentNo */
+  'Campbell River',
+  true, /* IsCreated */
+  false, /* IsInICM */
+  false, /* IsCompleted */
+  '{        
         "confirmationId": "8E9501F1",
         "createdAt": "2022-04-22T21:39:52.379Z", 
         "formId": "a8cc0e8c-1d63-4022-bfa1-7b99fea4edc8",
@@ -21,6 +55,6 @@ INSERT INTO FormTemplates VALUES (
         "lastName": "Testlast",
         "token": "da9b09dd-db16-42bb-ba77-f4af93ac02d9"    
   }',
-  current_timestamp
+  'USERB',
+   current_timestamp
 );
-

@@ -19,7 +19,7 @@ CREATE INDEX Idx_FormTemplates_Code ON FormTemplates(Code);
 /* FormsCreated */
 CREATE TABLE FormsCreated (
    Id SERIAL PRIMARY KEY,
-   FormKey VARCHAR(30) NOT NULL,
+   FormKey VARCHAR(60) NOT NULL,
    FormTemplateId INTEGER NOT NULL,
    VersionNo INTEGER NOT NULL,
    CatchmentNo INTEGER NOT NULL,
@@ -36,8 +36,32 @@ CREATE INDEX Idx_FormsCreated_FormTemplateId ON FormsCreated(FormTemplateId);
 
 CREATE INDEX Idx_FormsCreated_FormKey ON FormsCreated(FormKey);
 
-CREATE INDEX Idx_FormsCreated_CatchmentNo ON FormsCreatde(CatchmentNo);
+CREATE INDEX Idx_FormsCreated_CatchmentNo ON FormsCreated(CatchmentNo);
 
 CREATE INDEX Idx_FormsCreated_DateCreated ON FormsCreated(DateCreated);
 
-CREATE VIEW View_FormsCreated_
+/* Views */
+
+/* 
+  FormsCreate_Listing is intended for the default view of forms created. 
+  It only lists forms which have not completed. (NOT IsCompleted)
+  This should include a WHERE CatchmentNo = # filter.
+*/
+CREATE VIEW FormsCreated_Listing AS
+SELECT 
+  FormTemplates.Code,
+  FormsCreated.FormKey,
+  FormsCreated.CatchmentNo,
+  FormsCreated.StoreFrontName,
+  FormsCreated.IsCreated,
+  FormsCreated.IsInICM,
+  FormsCreated.IsCompleted,
+  FormsCreated.DateCreated,
+  FormsCreated.CreatedBy,
+  FormsCreated.FormData ->> 'lastName' AS LastName,
+  FormsCreated.FormData ->> 'firstName' AS FirstName
+FROM
+  FormsCreated,FormTemplates
+WHERE
+  FormTemplates.Id = FormsCreated.FormTemplateId AND
+  (NOT FormsCreated.IsCompleted)
