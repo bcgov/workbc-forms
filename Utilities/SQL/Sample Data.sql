@@ -19,7 +19,7 @@ TRUNCATE TABLE FormsCreated RESTART IDENTITY;
 
 INSERT INTO FormsCreated VALUES (
   DEFAULT,
-  'a8cc0e8c-1d63-4022-bfa1-7b99fea4edc8',
+  'a8cc0e8c-1d63-4022-bfa1-7b99fea4edc9',
   1, /* FormTemplateId */
   1, /* VersionNo */
   1, /* CatchmentNo */
@@ -27,11 +27,10 @@ INSERT INTO FormsCreated VALUES (
   false, /* IsCreated */
   false, /* IsInICM */
   false, /* IsCompleted */
-  null,
+  '',
   'USERA',
    current_timestamp
 );
-
 INSERT INTO FormsCreated VALUES (
   DEFAULT,
   'a8cc0e8c-1d63-4022-bfa1-7b99fea4edc9',
