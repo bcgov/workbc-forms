@@ -63,7 +63,8 @@ SELECT
   FormsCreated.DateCreated,
   FormsCreated.CreatedBy,
   FormsCreated.FormData ->> 'lastName' AS LastName,
-  FormsCreated.FormData ->> 'firstName' AS FirstName
+  FormsCreated.FormData ->> 'firstName' AS FirstName,
+  FormsCreated.FormData ->> 'caseNumber' As CaseNumber
 FROM
   FormsCreated,FormTemplates
 WHERE
