@@ -23,7 +23,7 @@ export const FormCreate = (props: any) => {
     return (
       <Create {...props}>
         <SimpleForm
-          initialValues={defaultValues}
+          defaultValues={defaultValues}
         >
           {/*
           <SelectInput source="title" choices={[
