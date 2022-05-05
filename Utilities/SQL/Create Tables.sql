@@ -54,6 +54,8 @@ SELECT
   FormTemplates.Code,
   FormTemplates.ClientAPIKey,
   FormTemplates.ProviderAPIKey,
+  FormsCreated.Id As FormsCreatedId,
+  FormsCreated.FormTemplateId As FormTemplateId,
   FormsCreated.FormKey,
   FormsCreated.CatchmentNo,
   FormsCreated.StoreFrontName,
@@ -68,5 +70,4 @@ SELECT
 FROM
   FormsCreated,FormTemplates
 WHERE
-  FormTemplates.Id = FormsCreated.FormTemplateId AND
-  (NOT FormsCreated.IsCompleted)
+  FormTemplates.Id = FormsCreated.FormTemplateId
