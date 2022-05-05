@@ -54,6 +54,8 @@ SELECT
   FormTemplates.Code,
   FormTemplates.ClientAPIKey,
   FormTemplates.ProviderAPIKey,
+  FormTemplates.ClientURL,
+  FormTemplates.ProviderURL,
   FormsCreated.Id As FormsCreatedId,
   FormsCreated.FormTemplateId As FormTemplateId,
   FormsCreated.FormKey,
