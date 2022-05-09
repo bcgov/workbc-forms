@@ -1,18 +1,21 @@
 import { chefsApi } from "../config/config"
 
-export const getFormSubmissions = async (body: any, formPass: string) => {
+export const getFormSubmissions = async (formId: string, formPass: string, params: any) => {
     try {
-        const url = `forms/${body.formId}/submissions`
-        const params = new URLSearchParams(body.params)
+        const url = `forms/${formId}/submissions`
+        const p = new URLSearchParams(params)
+        // console.log(p)
+        // console.log(formId)
+        // console.log(formPass)
         const config = {
             auth: {
-                username: body.formId,
+                username: formId,
                 password: formPass
             },
             headers: {
                 "Content-Type": "application/json"
             },
-            params: params
+            params: p
         }
         const formSubmissionResponse = await chefsApi.get(url, config)
         return formSubmissionResponse.data

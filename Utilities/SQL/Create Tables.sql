@@ -54,6 +54,10 @@ SELECT
   FormTemplates.Code,
   FormTemplates.ClientAPIKey,
   FormTemplates.ProviderAPIKey,
+  FormTemplates.ClientURL,
+  FormTemplates.ProviderURL,
+  FormsCreated.Id As FormsCreatedId,
+  FormsCreated.FormTemplateId As FormTemplateId,
   FormsCreated.FormKey,
   FormsCreated.CatchmentNo,
   FormsCreated.StoreFrontName,
@@ -63,9 +67,9 @@ SELECT
   FormsCreated.DateCreated,
   FormsCreated.CreatedBy,
   FormsCreated.FormData ->> 'lastName' AS LastName,
-  FormsCreated.FormData ->> 'firstName' AS FirstName
+  FormsCreated.FormData ->> 'firstName' AS FirstName,
+  FormsCreated.FormData ->> 'caseNumber' As CaseNumber
 FROM
   FormsCreated,FormTemplates
 WHERE
-  FormTemplates.Id = FormsCreated.FormTemplateId AND
-  (NOT FormsCreated.IsCompleted)
+  FormTemplates.Id = FormsCreated.FormTemplateId
