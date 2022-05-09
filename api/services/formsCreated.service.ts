@@ -83,14 +83,16 @@ export const setFormCreated = async (formKey: string, formData: any) => {
 }
 
 export const setFormComplete = async (formKey: string) => {
+    console.log(`UPDATE FormsCreated
+        SET 
+          IsCompleted = true
+        WHERE FormKey = ${formKey}`)
     try {
         await db.query(`
             UPDATE FormsCreated
             SET 
-              IsCompleted = true,
-            WHERE
-              FormKey = $1
-            `, [formKey]).then((resp:any) => {
+              IsCompleted = true
+            WHERE FormKey = $1`, [formKey]).then((resp:any) => {
             console.log(resp)
         })
     } catch (e: any) {

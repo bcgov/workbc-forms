@@ -10,6 +10,7 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
         const params = {
             fields: "firstName,lastName,caseNumber,token"
         }
+        const result = formsCreated.content
         formsCreated.content.forEach(async (form: any, i: number) => {
             // console.log(form)
             // console.log(formsCreated.keys[i])
@@ -26,9 +27,13 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
                 // look for token in provider submissions
                 const providerForm = providerSubmissions.find((s: any) => s.token === form.key) || null
                 console.log(providerForm)
+                // update provider form
                 if (providerForm) {
                     console.log("updating DB entry")
-                    await createdForms.setFormCreated(form.key, providerForm)
+                    const updated = await createdForms.setFormCreated(form.key, providerForm)
+                    if (updated) {
+                        result[i].isCreated = true
+                    }
                 }
             }
             // if form is not complete (by client) check
@@ -36,20 +41,26 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
                 const clientSubmissions = await submissionService.getFormSubmissions(clientId, formsCreated.keys[i].clientApiKey, params)
                 console.log(clientSubmissions)
                 const clientForm = clientSubmissions.find((s: any) => s.token === form.key) || null
+                // update client form
                 if (clientForm) {
                     console.log("updating client DB entry")
-                    await createdForms.setFormComplete(form.key)
+                    console.log(form.key)
+                    const updated = await createdForms.setFormComplete(form.key)
+                    if (updated) {
+                        result[i].isCompleted = true
+                    }
                 }
             }
-            // update form created for sp and client
         })
+        console.log("RESULT")
+        console.log(result)
         res.set(
             {
                 "Access-Control-Expose-Headers": "Content-Range",
                 "Content-Range": `0 - ${formsCreated.count} / ${formsCreated.count}`
             }
         )
-        return res.status(200).send(formsCreated.content)
+        return res.status(200).send(result)
     } catch (e: any) {
         console.log(e)
         return res.status(500).send("Internal Server Error")
