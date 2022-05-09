@@ -40,11 +40,18 @@
       "react-app/jest"
     ]
   },
-  "browserslist": [
-    "defaults",
-    "not IE 11",
-    "maintained node versions"
-  ],
+  "browserslist": {
+    "production": [
+      "defaults",
+      "not IE 11",
+      "maintained node versions"
+    ],
+    "development": [
+      "last 2 chrome version",
+      "last 2 firefox version",
+      "last 2 safari version"
+    ]
+  },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
     "@types/node": "^17.0.31",
