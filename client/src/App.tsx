@@ -8,7 +8,7 @@ import fakeDataProvider from 'ra-data-fakerest'
 import { FormList } from './Forms/FormsList';
 import { FormCreate } from './Forms/FormCreate';
 
-
+/*
 const dataProvider = fakeDataProvider({
   my_forms: [
       { id: 0, formCode: 0, created: true, url: "https://some-url.ca", client_completed: true },
@@ -17,10 +17,12 @@ const dataProvider = fakeDataProvider({
     {id: 0, title: 'Test Form', formCode: "HR123456", url: ""},
   ]
 })
+*/
 
+const dataProvider = simpleRestProvider("http://localhost:8000")
 
-
-
+console.log(process.env.DATA_PROVIDER_URL)
+console.log(dataProvider)
 
 
 
@@ -30,8 +32,8 @@ function App() {
     <Admin
       dataProvider={dataProvider}
     >
-      <Resource name="my_forms" list={FormList} create={FormCreate}/>
-      <Resource name="forms" list={ListGuesser} edit={EditGuesser}/>
+      <Resource name="forms" list={FormList} create={FormCreate}/>
+      <Resource name="formTemplates" list={ListGuesser} edit={EditGuesser}/>
     </Admin>
   );
 }
