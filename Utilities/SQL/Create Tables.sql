@@ -9,6 +9,7 @@
     ClientAPIKey VARCHAR(60) NOT NULL,
     ProviderURL VARCHAR(255) NOT NULL,
     ProviderAPIKey VARCHAR(60) NOT NULL,
+    DBHash VARCHAR(255) NOT NULL,
     IsActive BOOLEAN NOT NULL,
     FormDefinition JSONB NOT NULL,
     DateCreated TIMESTAMP NOT NULL  
@@ -56,6 +57,7 @@ SELECT
   FormTemplates.ProviderAPIKey,
   FormTemplates.ClientURL,
   FormTemplates.ProviderURL,
+  FormTemplates.PDFHash,
   FormsCreated.Id As FormsCreatedId,
   FormsCreated.FormTemplateId As FormTemplateId,
   FormsCreated.FormKey,
