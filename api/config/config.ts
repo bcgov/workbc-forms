@@ -4,6 +4,8 @@ const axios = require("axios")
 
 const chefsBaseUrl = process.env.CHEFS_URL || ""
 const formsBaseUrl = process.env.FORMS_API_URL || ""
+const cdogsBaseUrl = process.env.CDOGS_HOST || ""
+const authBaseUrl = process.env.AUTH_KEYCLOAK_SERVER_URL || ""
 
 export const chefsApi: AxiosInstance = axios.create(
     {
@@ -11,8 +13,20 @@ export const chefsApi: AxiosInstance = axios.create(
     }
 )
 
+export const cdogsApi: AxiosInstance = axios.create(
+    {
+        baseURL: cdogsBaseUrl
+    }
+)
+
 export const formsApi: AxiosInstance = axios.create(
     {
         baseURL: formsBaseUrl
+    }
+)
+
+export const authApi: AxiosInstance = axios.create(
+    {
+        baseURL: authBaseUrl
     }
 )

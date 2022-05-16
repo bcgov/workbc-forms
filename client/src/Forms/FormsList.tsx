@@ -61,9 +61,9 @@ export const FormList = (props: any) => {
                 <FunctionField
                     label="Generate PDF"
                     render={(record: any) =>
-                        record.client_completed ?
+                        record.isCompleted ?
                             <div>
-                                <a href={`https://`} target="_blank" rel='noopener noreferrer'>Generate PDF</a>
+                                <a href={`http://localhost:8000/pdf/${record.key}`} target="_blank" rel='noopener noreferrer'>Generate PDF</a>
                             </div>
                             :
                             `Not Available`
