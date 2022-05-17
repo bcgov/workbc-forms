@@ -29,10 +29,12 @@ app.use(helmet.contentSecurityPolicy({
 const formTemplatesRouter = require("./routes/formTemplates.route")
 const formsCreated = require("./routes/formsCreated.route")
 const client = require("./routes/client.route")
+const pdf = require("./routes/pdf.route")
 
 app.use("/forms", formsCreated.default)
 app.use("/formTemplates", formTemplatesRouter.default)
 app.use("/client", client.default)
+app.use("/", pdf.default)
 
 const port = process.env.PORT || "8000"
 app.listen(port, () => {
