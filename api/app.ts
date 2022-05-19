@@ -2,12 +2,13 @@
 import bodyParser from "body-parser"
 
 const helmet = require("helmet")
-
+const cors = require("cors")
 const express = require("express")
 
 const app = express()
 const morgan = require("morgan")
 
+app.use(cors())
 app.use(morgan("[:date] :method :url :status :res[content-length] - :remote-addr - :response-time ms"))
 app.set("trust proxy", "loopback, linklocal, uniquelocal")
 
@@ -24,9 +25,16 @@ app.use(helmet.contentSecurityPolicy({
     }
 }))
 
-const submissionRouter = require("./routes/submission.route")
+// const submissionRouter = require("./routes/submission.route")
+const formTemplatesRouter = require("./routes/formTemplates.route")
+const formsCreated = require("./routes/formsCreated.route")
+const client = require("./routes/client.route")
+const pdf = require("./routes/pdf.route")
 
-app.use("/forms", submissionRouter.default)
+app.use("/forms", formsCreated.default)
+app.use("/formTemplates", formTemplatesRouter.default)
+app.use("/client", client.default)
+app.use("/", pdf.default)
 
 const port = process.env.PORT || "8000"
 app.listen(port, () => {

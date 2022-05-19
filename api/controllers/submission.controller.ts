@@ -18,6 +18,7 @@ export const checkingToken = async (req: any, res: express.Response) => {
     let flagging = false
     let i = 0
     try {
+        // const formTemplate = formTemplateService.getFormData()
         const y = await submissionService.getFormSubmissions(req.body, req.body.formPass)
         // should I code for binary search since it's better?
         for (; i < y.length; i += 1) {
@@ -37,7 +38,4 @@ export const checkingToken = async (req: any, res: express.Response) => {
         console.log(e)
         res.status(500).send("Internal Server Error")
     }
-}
-export const anotherFunction = async (req: any, res: express.Response) => {
-    res.status(200).send("OK2")
 }

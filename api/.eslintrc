@@ -10,6 +10,7 @@
         // regular rules //
         "max-len": ["error", 150],
         "object-shorthand": "off",
+        "operator-linebreak": ["error", "after"],
         "no-tabs": "off",
         "no-console": "off",
         "semi": "off",
