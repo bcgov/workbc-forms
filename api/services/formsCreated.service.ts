@@ -1,9 +1,10 @@
 const db = require("../db/db")
 
-export const getCreatedForms = async () => {
+export const getCreatedForms = async (col: string, filter: string) => {
     let createdForms: any
+    if(col === 'id'){col = 'formscreatedid';}
     try {
-        await db.query("SELECT * FROM FormsCreated_Listing").then((resp:any) => {
+        await db.query("SELECT * FROM FormsCreated_Listing ORDER BY " + col + " " + filter).then((resp:any) => {
             console.log(resp.rows)
             createdForms = {
                 count: resp.rowCount,
