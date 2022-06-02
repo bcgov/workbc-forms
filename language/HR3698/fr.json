@@ -30,5 +30,6 @@
     "Print Name": "Nom en caractères d'imprimerie",
     "Date": "Date",
     "If signing on behalf of the client, specify relationship": "Si vous signez au nom d'un client, veuillez préciser votre relation avec lui",
-    "Contact Phone Number": "Numéro de téléphone de la personne-ressourcer"
+    "Contact Phone Number": "Numéro de téléphone de la personne-ressourcer",
+    "Add Another": "Ajouter un autre"
 }
