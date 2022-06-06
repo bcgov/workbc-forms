@@ -1,11 +1,14 @@
 import './App.css';
-import { Admin, EditGuesser, ListGuesser, Resource } from 'react-admin';
+import { Admin, EditGuesser, ListGuesser, Resource, Authenticated } from 'react-admin';
 import simpleRestProvider from 'ra-data-simple-rest'
 import { FormList } from './Forms/FormsList';
 import { FormCreate } from './Forms/FormCreate';
 import Layout from './Layout';
 import Footer from './footer';
-
+import { ReactKeycloakProvider } from '@react-keycloak/web'
+import Keycloak from 'keycloak-js'
+import useAuthProvider from './Auth/authProvider';
+import LoginPage from './Auth/LoginPage';
 
 /*
 const dataProvider = fakeDataProvider({
@@ -17,6 +20,32 @@ const dataProvider = fakeDataProvider({
   ]
 })
 */
+
+const initOptions = {
+  url: process.env.REACT_APP_KEYCLOAK_URL || "",
+  realm: process.env.REACT_APP_KEYCLOAK_REALM || "",
+  clientId: process.env.REACT_APP_KEYCLOAK_CLIENT_ID || "",
+}
+
+const keycloak = new Keycloak(initOptions)
+
+const onToken = () => {
+  if (keycloak.token && keycloak.refreshToken) {
+    localStorage.setItem("token", keycloak.token);
+    localStorage.setItem("refresh-token", keycloak.refreshToken);
+  }
+};
+
+const onTokenExpired = () => {
+  keycloak
+    .updateToken(30)
+    .then(() => {
+      console.log("successfully get a new token", keycloak.token);
+    })
+    .catch(() => {
+      console.error("failed to refresh token");
+    });
+};
 
 export const lightTheme = {
   components: {
@@ -36,20 +65,49 @@ const dataProvider = simpleRestProvider("http://localhost:8000")
 console.log(process.env.DATA_PROVIDER_URL)
 console.log(dataProvider)
 
+const CustomAdminWithKeycloak = () => {
+  const customAuthProvider = useAuthProvider(
+    process.env.REACT_APP_KEYCLOAK_CLIENT_ID || ""
+  );
+  return (
+    <Admin
+    theme={lightTheme}
+    dataProvider={dataProvider}
+    authProvider={customAuthProvider}
+    loginPage={false}
+    layout={Layout}
+    disableTelemetry
+    requireAuth
+  >
 
+      <Resource name="forms" list={FormList} create={FormCreate} />
+    <Authenticated>
+      <Resource name="formTemplates" list={ListGuesser} edit={EditGuesser} />
+    </Authenticated>
+    
+  </Admin >
+  );
+};
 
 
 function App() {
   return (
-    <><Admin
-      theme={lightTheme}
-      dataProvider={dataProvider}
-      layout={Layout}
+    <ReactKeycloakProvider
+      authClient={keycloak}
+      LoadingComponent={<div></div>}
+      onTokens={onToken}
+      initOptions={{
+        onLoad: 'login-required',
+        onTokenExpired: onTokenExpired
+      }}
+      
     >
+      <CustomAdminWithKeycloak />
+      <Footer />
+    </ReactKeycloakProvider>
 
-      <Resource name="forms" list={FormList} create={FormCreate} />
-      <Resource name="formTemplates" list={ListGuesser} edit={EditGuesser} />
-    </Admin><Footer /></>
+
+
   );
 }
 
