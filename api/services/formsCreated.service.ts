@@ -4,7 +4,7 @@ export const getCreatedForms = async () => {
     let createdForms: any
     try {
         await db.query("SELECT * FROM FormsCreated_Listing").then((resp:any) => {
-            console.log(resp.rows)
+            // console.log(resp.rows)
             createdForms = {
                 count: resp.rowCount,
                 content: resp.rows.map((t: any) => (
@@ -45,7 +45,7 @@ export const getCreatedFormsByKey = async (formKey: string) => {
     let createdForms: any
     try {
         await db.query("SELECT * FROM FormsCreated_Listing WHERE FormKey = $1 LIMIT 1", [formKey]).then((resp:any) => {
-            console.log(resp.rows)
+            // console.log(resp.rows)
             if (resp.rows.length === 0) {
                 createdForms = {}
             } else {
@@ -73,7 +73,7 @@ export const setFormCreated = async (formKey: string, formData: any) => {
             WHERE
               FormKey = $2
             `, [formData, formKey]).then((resp:any) => {
-            console.log(resp)
+            // console.log(resp)
         })
     } catch (e: any) {
         console.log(e)
@@ -83,17 +83,13 @@ export const setFormCreated = async (formKey: string, formData: any) => {
 }
 
 export const setFormComplete = async (formKey: string) => {
-    console.log(`UPDATE FormsCreated
-        SET 
-          IsCompleted = true
-        WHERE FormKey = ${formKey}`)
     try {
         await db.query(`
             UPDATE FormsCreated
             SET 
               IsCompleted = true
             WHERE FormKey = $1`, [formKey]).then((resp:any) => {
-            console.log(resp)
+            // console.log(resp)
         })
     } catch (e: any) {
         console.log(e)
@@ -121,8 +117,8 @@ export const insertForm = async (formKey: string, formTemplateId: string, catchm
                 current_timestamp
             ) RETURNING id
             `, [formKey, formTemplateId, catchmentNo, storeFrontName, userName]).then((resp:any) => {
-            console.log("resp is")
-            console.log(resp)
+            // console.log("resp is")
+            // console.log(resp)
             id = resp.rows[0].id
         })
     } catch (e: any) {
