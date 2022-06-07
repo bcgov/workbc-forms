@@ -8,6 +8,7 @@ import Footer from './footer';
 import { ReactKeycloakProvider } from '@react-keycloak/web'
 import Keycloak from 'keycloak-js'
 import useAuthProvider from './Auth/authProvider';
+import {AcUnit} from "@material-ui/icons"
 import LoginPage from './Auth/LoginPage';
 
 /*
@@ -79,11 +80,9 @@ const CustomAdminWithKeycloak = () => {
     disableTelemetry
     requireAuth
   >
+    <Resource name="forms" list={FormList} create={FormCreate} />
+    <Resource name="formTemplates" list={ListGuesser} edit={EditGuesser} icon={AcUnit}/>
 
-      <Resource name="forms" list={FormList} create={FormCreate} />
-    <Authenticated>
-      <Resource name="formTemplates" list={ListGuesser} edit={EditGuesser} />
-    </Authenticated>
     
   </Admin >
   );

@@ -1,6 +1,7 @@
 export interface UserPermissions {
     hasAccess: boolean,
-    catchments: number[]
+    catchments: number[],
+    isIDIR: boolean
 }
 
 export interface OESAccessDefinition {

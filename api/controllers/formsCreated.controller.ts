@@ -72,7 +72,7 @@ export const createForm = async (req: any, res: express.Response) => {
         console.log(req.body)
         res.status(200)
         const created =
-                    await createdForms.insertForm(req.body.formKey, req.body.code, req.body.catchmentNo, req.body.storeFrontName, req.body.userName)
+                    await createdForms.insertForm(req.body.formKey, req.body.code, req.body.catchment, req.body.storefront, req.body.userName)
         console.log("created is")
         console.log(created)
         if (created) {

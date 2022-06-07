@@ -35,7 +35,7 @@ const common = require("./routes/common.route")
 app.use("/Forms", formsCreated.default)
 app.use("/FormTemplates", formTemplatesRouter.default)
 app.use("/Client", client.default)
-app.use("/Common", common)
+app.use("/Common", common.default)
 app.use("/", pdf.default)
 
 const port = process.env.PORT || "8000"

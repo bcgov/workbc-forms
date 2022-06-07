@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios"
 import { oesApi } from "../config/config"
 
-export const getUserPermissions = async (userGUID: string): Promise<any> => {
+export const getUserPermissions = async (userGUID: string, isIDIR = false): Promise<any> => {
     try {
         const resp: AxiosResponse = await oesApi.get("User/Permissions", {
             auth: {
@@ -9,7 +9,8 @@ export const getUserPermissions = async (userGUID: string): Promise<any> => {
                 password: process.env.OES_PASS || ""
             },
             params: {
-                userGUID: userGUID
+                userGUID: userGUID,
+                isIDIR: isIDIR
             }
         })
 
