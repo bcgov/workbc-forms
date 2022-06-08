@@ -1,9 +1,10 @@
 import * as React from 'react'
-import { BooleanField, Datagrid, FunctionField, List, ReferenceField, TextField } from "react-admin"
+import { BooleanField, Datagrid, FunctionField, List, ReferenceField, TextField, useAuthenticated } from "react-admin"
 const CopyToClipboard = require('react-copy-to-clipboard')
 
 export const FormList = (props: any) => {
     const a = "b"
+    useAuthenticated()
     return (
         <List {...props}>
             <Datagrid>

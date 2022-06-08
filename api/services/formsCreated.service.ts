@@ -2,17 +2,17 @@ const db = require("../db/db")
 
 export const getCreatedForms = async (col: string, filter: string) => {
     let createdForms: any
-    if(col === 'id'){col = 'formscreatedid';}
+    if (col === 'id') { col = 'formscreatedid'; }
     var format = require('pg-format');
-    if(filter === 'ASC'){
+    if (filter === 'ASC') {
         var sql = format('SELECT * FROM FormsCreated_Listing ORDER BY %I ASC', col);
-    } else{
+    } else {
         var sql = format('SELECT * FROM FormsCreated_Listing ORDER BY %I DESC', col);
     }
     console.log(sql);
     try {
-        await db.query(sql).then((resp:any) => {
-            console.log(resp.rows)
+        await db.query("SELECT * FROM FormsCreated_Listing").then((resp: any) => {
+            // console.log(resp.rows)
             createdForms = {
                 count: resp.rowCount,
                 content: resp.rows.map((t: any) => (
@@ -52,8 +52,8 @@ export const getCreatedForms = async (col: string, filter: string) => {
 export const getCreatedFormsByKey = async (formKey: string) => {
     let createdForms: any
     try {
-        await db.query("SELECT * FROM FormsCreated_Listing WHERE FormKey = $1 LIMIT 1", [formKey]).then((resp:any) => {
-            console.log(resp.rows)
+        await db.query("SELECT * FROM FormsCreated_Listing WHERE FormKey = $1 LIMIT 1", [formKey]).then((resp: any) => {
+            // console.log(resp.rows)
             if (resp.rows.length === 0) {
                 createdForms = {}
             } else {
@@ -80,8 +80,8 @@ export const setFormCreated = async (formKey: string, formData: any) => {
               FormData = $1
             WHERE
               FormKey = $2
-            `, [formData, formKey]).then((resp:any) => {
-            console.log(resp)
+            `, [formData, formKey]).then((resp: any) => {
+            // console.log(resp)
         })
     } catch (e: any) {
         console.log(e)
@@ -91,17 +91,13 @@ export const setFormCreated = async (formKey: string, formData: any) => {
 }
 
 export const setFormComplete = async (formKey: string) => {
-    console.log(`UPDATE FormsCreated
-        SET 
-          IsCompleted = true
-        WHERE FormKey = ${formKey}`)
     try {
         await db.query(`
             UPDATE FormsCreated
             SET 
               IsCompleted = true
-            WHERE FormKey = $1`, [formKey]).then((resp:any) => {
-            console.log(resp)
+            WHERE FormKey = $1`, [formKey]).then((resp: any) => {
+            // console.log(resp)
         })
     } catch (e: any) {
         console.log(e)
@@ -128,9 +124,9 @@ export const insertForm = async (formKey: string, formTemplateId: string, catchm
                 $5,   /* User name */
                 current_timestamp
             ) RETURNING id
-            `, [formKey, formTemplateId, catchmentNo, storeFrontName, userName]).then((resp:any) => {
-            console.log("resp is")
-            console.log(resp)
+            `, [formKey, formTemplateId, catchmentNo, storeFrontName, userName]).then((resp: any) => {
+            // console.log("resp is")
+            // console.log(resp)
             id = resp.rows[0].id
         })
     } catch (e: any) {

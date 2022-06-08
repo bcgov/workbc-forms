@@ -5,10 +5,10 @@ const submissionService = require("../services/submissions.service")
 
 export const getFormsCreated = async (req: any, res: express.Response) => {
     try {
-        const { sort } = req.query;
-        const sorted = sort.replace(/[^a-zA-Z0-9,]/g, '').split(',');
-        const formsCreated = await createdForms.getCreatedForms(sorted[0], sorted[1])
-        console.log(formsCreated)
+        // console.log(req.headers)
+        // console.log(req.kauth.grant)
+        const formsCreated = await createdForms.getCreatedForms()
+        // console.log(formsCreated)
         const params = {
             fields: "firstName,lastName,caseNumber,token"
         }
@@ -25,10 +25,10 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
             // if form is marked as not created check
             if (!form.isCreated) {
                 const providerSubmissions = await submissionService.getFormSubmissions(providerId, formsCreated.keys[i].providerApiKey, params)
-                console.log(providerSubmissions)
+                // console.log(providerSubmissions)
                 // look for token in provider submissions
                 const providerForm = providerSubmissions.find((s: any) => s.token === form.key) || null
-                console.log(providerForm)
+                // console.log(providerForm)
                 // update provider form
                 if (providerForm) {
                     console.log("updating DB entry")
@@ -41,12 +41,12 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
             // if form is not complete (by client) check
             if (!form.isCompleted) {
                 const clientSubmissions = await submissionService.getFormSubmissions(clientId, formsCreated.keys[i].clientApiKey, params)
-                console.log(clientSubmissions)
+                // console.log(clientSubmissions)
                 const clientForm = clientSubmissions.find((s: any) => s.token === form.key) || null
                 // update client form
                 if (clientForm) {
-                    console.log("updating client DB entry")
-                    console.log(form.key)
+                    // console.log("updating client DB entry")
+                    // console.log(form.key)
                     const updated = await createdForms.setFormComplete(form.key)
                     if (updated) {
                         result[i].isCompleted = true
@@ -54,8 +54,8 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
                 }
             }
         })
-        console.log("RESULT")
-        console.log(result)
+        // console.log("RESULT")
+        // console.log(result)
         res.set(
             {
                 "Access-Control-Expose-Headers": "Content-Range",
@@ -74,7 +74,7 @@ export const createForm = async (req: any, res: express.Response) => {
         console.log(req.body)
         res.status(200)
         const created =
-                    await createdForms.insertForm(req.body.formKey, req.body.code, req.body.catchmentNo, req.body.storeFrontName, req.body.userName)
+                    await createdForms.insertForm(req.body.formKey, req.body.code, req.body.catchment, req.body.storefront, req.body.userName)
         console.log("created is")
         console.log(created)
         if (created) {
