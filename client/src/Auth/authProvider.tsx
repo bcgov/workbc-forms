@@ -29,10 +29,12 @@ const useAuthProvider = (clientID: string) => {
         },
         getPermissions: async () => {
             if (localStorage.getItem('token')) {
-                const decoded: any = jwt_decode(localStorage.getItem('token') || "")
+                const token = localStorage.getItem('token')
+                const decoded: any = jwt_decode( token|| "")
                 const permissionRequest = new Request(`http://localhost:8000/Common/UserPermissions/${decoded.identity_provider}`, {
                     method: "GET",
                     headers: new Headers({
+                        Authorization: `Bearer ${token}`,
                         userGUID: decoded.smgov_userguid || ""
                     })
                 })

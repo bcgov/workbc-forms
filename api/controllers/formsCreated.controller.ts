@@ -5,8 +5,10 @@ const submissionService = require("../services/submissions.service")
 
 export const getFormsCreated = async (req: any, res: express.Response) => {
     try {
+        //console.log(req.headers)
+        //console.log(req.kauth.grant)
         const formsCreated = await createdForms.getCreatedForms()
-        //console.log(formsCreated)
+        // console.log(formsCreated)
         const params = {
             fields: "firstName,lastName,caseNumber,token"
         }

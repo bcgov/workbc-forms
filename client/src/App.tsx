@@ -1,5 +1,5 @@
 import './App.css';
-import { Admin, EditGuesser, ListGuesser, Resource, Authenticated } from 'react-admin';
+import { Admin, EditGuesser, ListGuesser, Resource, Authenticated, fetchUtils } from 'react-admin';
 import simpleRestProvider from 'ra-data-simple-rest'
 import { FormList } from './Forms/FormsList';
 import { FormCreate } from './Forms/FormCreate';
@@ -61,7 +61,18 @@ export const lightTheme = {
     },
   },
 }
-const dataProvider = simpleRestProvider("http://localhost:8000")
+
+const httpClient = (url) => {
+  let options = {
+    headers: new Headers({Accept: 'application/json'})
+  }
+  
+  //add bearer token
+  options.headers.set("Authorization", `Bearer ${localStorage.getItem("token")}`)
+  return fetchUtils.fetchJson(url, options)
+}
+
+const dataProvider = simpleRestProvider("http://localhost:8000", httpClient)
 
 console.log(process.env.DATA_PROVIDER_URL)
 console.log(dataProvider)
@@ -80,7 +91,7 @@ const CustomAdminWithKeycloak = () => {
     disableTelemetry
     requireAuth
   >
-    <Resource name="forms" list={FormList} create={FormCreate} />
+    <Resource name="forms" list={FormList} create={FormCreate} edit={EditGuesser} />
     <Resource name="formTemplates" list={ListGuesser} edit={EditGuesser} icon={AcUnit}/>
 
     

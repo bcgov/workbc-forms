@@ -1,10 +1,8 @@
 import React, { useState } from "react"
 import { v4 as uuidv4 } from 'uuid'
-import { useMemo } from "react"
 import { Create, ReferenceInput, SelectInput, SimpleForm, usePermissions, useGetPermissions, FormDataConsumer, useGetIdentity } from "react-admin"
 
 const FormReferenceInput = (props: any) => {
-
   return (
     <>
       <ReferenceInput {...props}>
@@ -66,7 +64,10 @@ export const FormCreate = (props: any) => {
       const getCatchmentInfoRequest = new Request(
         `http://localhost:8000/Common/Catchments`,
         {
-          method: "GET"
+          method: "GET",
+          headers: new Headers({
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          })
         }
       )
       try {
@@ -125,4 +126,8 @@ export const FormCreate = (props: any) => {
     <div>Loading</div>
 }
 
+
+function useWatch(arg0: { name: string }) {
+  throw new Error("Function not implemented.")
+}
 
