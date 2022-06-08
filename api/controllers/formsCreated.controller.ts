@@ -7,7 +7,9 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
     try {
         // console.log(req.headers)
         // console.log(req.kauth.grant)
-        const formsCreated = await createdForms.getCreatedForms()
+        const { sort } = req.query;
+        const sorted = sort.replace(/[^a-zA-Z0-9,]/g, "").split(",")
+        const formsCreated = await createdForms.getCreatedForms(sorted[0], sorted[1])
         // console.log(formsCreated)
         const params = {
             fields: "firstName,lastName,caseNumber,token"

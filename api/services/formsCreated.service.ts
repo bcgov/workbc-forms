@@ -1,17 +1,18 @@
+const format = require("pg-format")
 const db = require("../db/db")
 
 export const getCreatedForms = async (col: string, filter: string) => {
     let createdForms: any
-    if (col === 'id') { col = 'formscreatedid'; }
-    var format = require('pg-format');
-    if (filter === 'ASC') {
-        var sql = format('SELECT * FROM FormsCreated_Listing ORDER BY %I ASC', col);
+    if (col === "id") { col = "formscreatedid" }
+    let sql
+    if (filter === "ASC") {
+        sql = format("SELECT * FROM FormsCreated_Listing ORDER BY %I ASC", col)
     } else {
-        var sql = format('SELECT * FROM FormsCreated_Listing ORDER BY %I DESC', col);
+        sql = format("SELECT * FROM FormsCreated_Listing ORDER BY %I DESC", col)
     }
-    console.log(sql);
+    console.log(sql)
     try {
-        await db.query("SELECT * FROM FormsCreated_Listing").then((resp: any) => {
+        await db.query(sql).then((resp: any) => {
             // console.log(resp.rows)
             createdForms = {
                 count: resp.rowCount,
