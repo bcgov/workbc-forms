@@ -4,6 +4,15 @@ DELETE FROM FormsCreated WHERE (IsCompleted)
 /* Selecting curent items to display to provider. # is the catchment number (1-45) */
 SELECT * FROM FormsCreated_Listing WHERE CatchmentNo = #
 
+/* Selecting curent items to display to provider. By user name */
+SELECT * FROM FormsCreated_Listing WHERE CreatedBy = :UserName
+
+/* Sorting ORDER BY */
+SELECT * FROM FormsCreated_Listing 
+WHERE CatchmentNo = #
+ORDER BY StorefrontName, FormsCreatedId DESC
+
+
 /* Adding a new record, dialog prompt */
 INSERT INTO FormsCreated VALUES (
   DEFAULT,
