@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { BooleanField, Datagrid, FunctionField, List, ReferenceField, TextField, TopToolbar, SearchInput, useListContext, TextInput, FilterButton } from "react-admin"
+import { BooleanField, Datagrid, FunctionField, List, ReferenceField, TextField, TopToolbar, SearchInput, useListContext, TextInput, FilterButton, CreateButton } from "react-admin"
 import CircleIcon from '@mui/icons-material/Circle';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -17,6 +17,7 @@ const ListActions = () => (
     <TopToolbar sx={{ paddingTop: "5vh" }}>
     <div>
         <FilterButton />
+        <CreateButton />
     </div>
     </TopToolbar>
 );
