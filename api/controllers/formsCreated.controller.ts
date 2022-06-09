@@ -7,14 +7,15 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
     try {
         // console.log(req.headers)
         // console.log(req.kauth.grant)
-        const { sort } = req.query;
+        const { sort, filter } = req.query
+        const filters = JSON.parse(filter)
         const sorted = sort.replace(/[^a-zA-Z0-9,]/g, "").split(",")
         const formsCreated = await createdForms.getCreatedForms(sorted[0], sorted[1])
         // console.log(formsCreated)
         const params = {
             fields: "firstName,lastName,caseNumber,token"
         }
-        const result = formsCreated.content
+        let result = formsCreated.content
         formsCreated.content.forEach(async (form: any, i: number) => {
             // console.log(form)
             // console.log(formsCreated.keys[i])
@@ -56,6 +57,7 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
                 }
             }
         })
+
         // console.log("RESULT")
         // console.log(result)
         res.set(
@@ -64,6 +66,18 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
                 "Content-Range": `0 - ${formsCreated.count} / ${formsCreated.count}`
             }
         )
+        console.log(filters.q)
+        if (filters.q) {
+            result = result.filter((e: any) => (
+                (e.firstName && e.firstName.toUpperCase().search(filters.q.toUpperCase()) > -1) ||
+                (e.lastName && e.lastName.toUpperCase().search(filters.q.toUpperCase()) > -1)))
+        }
+        if (filters.isInICM) {
+            result = result.filter((e: any) => (
+                e.isInICM === filters.isInICM
+            ))
+        }
+        // console.log(result)
         return res.status(200).send(result)
     } catch (e: any) {
         console.log(e)

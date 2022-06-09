@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { BooleanField, Datagrid, FunctionField, List, ReferenceField, TextField, TopToolbar, SearchInput, useListContext, TextInput, FilterButton, CreateButton } from "react-admin"
+import { BooleanField, Datagrid, FunctionField, List, ReferenceField, TextField, TopToolbar, SearchInput, useListContext, TextInput, FilterButton, CreateButton, BooleanInput } from "react-admin"
 import CircleIcon from '@mui/icons-material/Circle';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -9,8 +9,8 @@ import Button from '@mui/material/Button';
 const CopyToClipboard = require('react-copy-to-clipboard')
 
 const formFilters = [
-    <SearchInput source="q" alwaysOn/>,
-    <TextInput source='isinicm' label="Added to ICM"/>
+    <TextInput label="Search by client name" source="q" alwaysOn/>,
+    <BooleanInput source='isInICM' label="Added to ICM" defaultValue={true} sx={{paddingBottom: "20px", paddingLeft: "20px"}}/>
 ];
 
 const ListActions = () => (
@@ -72,7 +72,13 @@ export const FormList = (props: any) => {
                         label="Enter Details"
                         render={(record: any) => !record.isCreated ?
                             <div>
-                                <a href={`${record.providerUrl.trim()}&token=${record.key}`} target="_blank" rel='noopener noreferrer'>Fill Out Form</a>
+                                <Button
+                                    href={`${record.providerUrl.trim()}&token=${record.key}`}
+                                    target="_blank"
+                                    rel='noopener noreferrer'
+                                    variant="contained"
+                                    sx={{ textAlign: 'center', backgroundColor: '#003366' }}>Fill Out Form
+                                </Button>
                             </div>
                             :
                             `N/A`} />
@@ -80,7 +86,10 @@ export const FormList = (props: any) => {
                         label="Copy URL"
                         render={(record: any) => !record.isCompleted && record.isCreated ?
                             <CopyToClipboard text={`${record.clientUrl.trim()}&token=${record.key}`}>
-                                <button>Copy</button>
+                                 <Button
+                                    variant="contained"
+                                    sx={{ backgroundColor: '#003366' }}>Copy
+                                </Button>
                             </CopyToClipboard>
                             :
                             `N/A`} />
@@ -88,7 +97,13 @@ export const FormList = (props: any) => {
                         label="Generate PDF"
                         render={(record: any) => record.isCompleted ?
                             <div>
-                                <a href={`http://localhost:8000/pdf/${record.key}`} target="_blank" rel='noopener noreferrer'>Generate PDF</a>
+                                <Button
+                                    href={`http://localhost:8000/pdf/${record.key}`}
+                                    target="_blank"
+                                    rel='noopener noreferrer'
+                                    variant="contained"
+                                    sx={{ backgroundColor: '#003366' }}>Download
+                                </Button>
                             </div>
                             :
                             `Not Available`} />
