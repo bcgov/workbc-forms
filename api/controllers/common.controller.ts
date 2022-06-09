@@ -24,4 +24,17 @@ export const getCatchments = async (req: any, res: express.Response) => {
     return res.status(200).send(catchments)
 }
 
+export const getCatchmentAndCentre = async (req: any, res: express.Response) => {
+    const { catchment, sf } = req.params
+    const catchments = commonService.getCatchments()
+    const ca = catchments.find(c => c.CatchmentNo === catchment)
+    const sfInfo = ca?.Storefronts.find(s => s.id === sf)
+
+    return res.status(200).send({
+        workBcCentreName: sfInfo?.name,
+        workBcCentreAddress: sfInfo?.Address,
+        workBcCentreTelephoneNumber: sfInfo?.Phone
+    })
+}
+
 export default getUserPermissions

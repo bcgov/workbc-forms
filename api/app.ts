@@ -42,13 +42,15 @@ app.use(keycloak.middleware())
 const formTemplatesRouter = require("./routes/formTemplates.route")
 const formsCreated = require("./routes/formsCreated.route")
 const client = require("./routes/client.route")
+const provider = require("./routes/provider.route")
 const pdf = require("./routes/pdf.route")
 const common = require("./routes/common.route")
 
+app.use("/Provider", provider.default)
+app.use("/Common", common.default)
 app.use("/Forms", keycloak.protect(), formsCreated.default)
 app.use("/FormTemplates", keycloak.protect(), formTemplatesRouter.default)
 app.use("/Client", keycloak.protect(), client.default)
-app.use("/Common", keycloak.protect(), common.default)
 //app.use("/", keycloak.protect(), pdf.default)
 
 const port = process.env.PORT || "8000"

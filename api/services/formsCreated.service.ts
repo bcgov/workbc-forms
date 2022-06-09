@@ -50,6 +50,27 @@ export const getCreatedForms = async (col: string, filter: string) => {
     return createdForms
 }
 
+export const getInitialCreatedFormsByKey = async (formKey: string) => {
+    let createdForms: any
+    try {
+        await db.query("SELECT * FROM FormsCreated_Listing WHERE FormKey = $1 LIMIT 1", [formKey]).then((resp: any) => {
+            // console.log(resp.rows)
+            if (resp.rows.length === 0) {
+                createdForms = {}
+            } else {
+                createdForms = {
+                    catchment: resp.rows[0].catchmentno,
+                    sf: resp.rows[0].storefrontname,
+                }
+            }
+        })
+    } catch (e: any) {
+        console.error("error while querying: ", e)
+        throw new Error(e.message)
+    }
+    return createdForms
+}
+
 export const getCreatedFormsByKey = async (formKey: string) => {
     let createdForms: any
     try {
