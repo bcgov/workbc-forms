@@ -1,4 +1,4 @@
-import * as express from "express"
+import e, * as express from "express"
 import * as createdForms from "../services/formsCreated.service"
 
 const submissionService = require("../services/submissions.service")
@@ -60,17 +60,13 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
 
         // console.log("RESULT")
         // console.log(result)
-        res.set(
-            {
-                "Access-Control-Expose-Headers": "Content-Range",
-                "Content-Range": `0 - ${formsCreated.count} / ${formsCreated.count}`
-            }
-        )
+
         console.log(filters.q)
         if (filters.q) {
             result = result.filter((e: any) => (
                 (e.firstName && e.firstName.toUpperCase().search(filters.q.toUpperCase()) > -1) ||
-                (e.lastName && e.lastName.toUpperCase().search(filters.q.toUpperCase()) > -1)))
+                (e.lastName && e.lastName.toUpperCase().search(filters.q.toUpperCase()) > -1) ||
+                ((`${e.firstName} ${e.lastName}`).toUpperCase().search(filters.q.toUpperCase()) > -1)))
         }
         if (filters.isInICM) {
             result = result.filter((e: any) => (
@@ -78,6 +74,12 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
             ))
         }
         // console.log(result)
+        res.set(
+            {
+                "Access-Control-Expose-Headers": "Content-Range",
+                "Content-Range": `0 - ${formsCreated.count} / ${formsCreated.count}`
+            }
+        )
         return res.status(200).send(result)
     } catch (e: any) {
         console.log(e)
