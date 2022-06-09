@@ -52,9 +52,9 @@ export const FormCreate = (props: any) => {
     return (
       <>
         <p>Catchment Name: {caInfo.Title}</p>
-        <p>Storefront Name: {sfInfo.name}</p>
-        <p>Storefront Address: {sfInfo.Address}</p>
-        <p>Storefront Phone: {sfInfo.Phone}</p>
+        <p>WorkBC Centre: {sfInfo.name}</p>
+        <p>WorkBC Centre Address: {sfInfo.Address}</p>
+        <p>WorkBC Centre Phone: {sfInfo.Phone}</p>
       </>
     )
   }
@@ -107,7 +107,7 @@ export const FormCreate = (props: any) => {
         <FormDataConsumer>
           {({ formData, ...rest }) => (
             (formData.catchment >= 1) &&
-            <SelectInput source="storefront" emptyValue={"Please select catchment"} choices={getStoreFront(formData.catchment)} {...rest} />
+            <SelectInput label="WorkBC Centre" source="storefront" emptyValue={"Please select catchment"} choices={getStoreFront(formData.catchment)} {...rest} />
           )}
         </FormDataConsumer>
         <FormDataConsumer>
