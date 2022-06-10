@@ -1,6 +1,5 @@
 import './App.css';
-import { Admin, EditGuesser, ListGuesser, Resource, Authenticated, fetchUtils } from 'react-admin';
-import simpleRestProvider from 'ra-data-simple-rest'
+import { Admin, EditGuesser, ListGuesser, Resource, Authenticated, fetchUtils, Options } from 'react-admin';
 import { FormList } from './Forms/FormsList';
 import { FormCreate } from './Forms/FormCreate';
 import Layout from './Layout';
@@ -10,6 +9,7 @@ import Keycloak from 'keycloak-js'
 import useAuthProvider from './Auth/authProvider';
 import {AcUnit} from "@material-ui/icons"
 import LoginPage from './Auth/LoginPage';
+import { dataProvider } from './DataProvider/DataProvider';
 
 /*
 const dataProvider = fakeDataProvider({
@@ -62,17 +62,8 @@ export const lightTheme = {
   },
 }
 
-const httpClient = (url) => {
-  let options = {
-    headers: new Headers({Accept: 'application/json'})
-  }
-  
-  //add bearer token
-  options.headers.set("Authorization", `Bearer ${localStorage.getItem("token")}`)
-  return fetchUtils.fetchJson(url, options)
-}
 
-const dataProvider = simpleRestProvider("http://localhost:8000", httpClient)
+//const dataProvider = simpleRestProvider("http://localhost:8000", httpClient)
 
 console.log(process.env.DATA_PROVIDER_URL)
 console.log(dataProvider)
