@@ -157,3 +157,35 @@ export const insertForm = async (formKey: string, formTemplateId: string, catchm
     }
     return id
 }
+
+export const setFormInICM = async (id: number) => {
+    try {
+        await db.query(`
+            UPDATE FormsCreated
+            SET
+                IsInICM = true
+            WHERE id = $1 AND IsCompleted = true`, [id])
+            .then((resp: any) => {
+                // console.log(resp)
+            })
+    } catch (e: any) {
+        console.log(e)
+        return false
+    }
+    return true
+}
+
+export const deleteForm = async (id: number) => {
+    try {
+        await db.query(`
+            DELETE FROM FormsCreated
+            WHERE id = $1`, [id])
+            .then((resp: any) => {
+                // console.log(resp)
+            })
+    } catch (e: any) {
+        console.log(e)
+        return false
+    }
+    return true
+}

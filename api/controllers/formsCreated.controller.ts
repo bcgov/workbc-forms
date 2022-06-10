@@ -8,8 +8,8 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
         // console.log(req.headers)
         // console.log(req.kauth.grant)
         const { sort, filter } = req.query
-        const filters = JSON.parse(filter)
-        const sorted = sort.replace(/[^a-zA-Z0-9,]/g, "").split(",")
+        const filters = filter ? JSON.parse(filter) : {}
+        const sorted = sort ? sort.replace(/[^a-zA-Z0-9,]/g, "").split(",") : ["id", "ASC"]
         const formsCreated = await createdForms.getCreatedForms(sorted[0], sorted[1])
         // console.log(formsCreated)
         const params = {
@@ -89,14 +89,48 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
 
 export const createForm = async (req: any, res: express.Response) => {
     try {
-        console.log(req.body)
-        res.status(200)
         const created =
                     await createdForms.insertForm(req.body.formKey, req.body.code, req.body.catchment, req.body.storefront, req.body.userName)
         console.log("created is")
         console.log(created)
         if (created) {
             return res.status(200).send({ id: created })
+        }
+        return res.status(500).send("Internal Server Error")
+    } catch (e: any) {
+        console.log(e)
+        return res.status(500).send("Internal Server Error")
+    }
+}
+
+export const deleteForm = async (req: any, res: express.Response) => {
+    try {
+        const { id } = req.params
+        console.log(id)
+        const deleted =
+                    await createdForms.deleteForm(parseInt(id, 10))
+        console.log("deleted is")
+        console.log(deleted)
+        if (deleted) {
+            return res.status(200).send({ id: id })
+        }
+        return res.status(500).send("Internal Server Error")
+    } catch (e: any) {
+        console.log(e)
+        return res.status(500).send("Internal Server Error")
+    }
+}
+
+export const updateForm = async (req: any, res: express.Response) => {
+    try {
+        const { id } = req.params
+        console.log(id)
+        const updated =
+                    await createdForms.setFormInICM(parseInt(id, 10))
+        console.log("updated is")
+        console.log(updated)
+        if (updated) {
+            return res.status(200).send({ id: id })
         }
         return res.status(500).send("Internal Server Error")
     } catch (e: any) {

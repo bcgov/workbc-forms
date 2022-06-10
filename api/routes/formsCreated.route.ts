@@ -5,5 +5,7 @@ const router = express.Router()
 
 router.get("/", formsCreated.getFormsCreated)
 router.post("/", formsCreated.createForm)
+router.delete("/:id", formsCreated.deleteForm)
+router.put("/:id", formsCreated.updateForm)
 
 export default router
