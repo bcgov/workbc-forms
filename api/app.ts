@@ -47,10 +47,10 @@ const pdf = require("./routes/pdf.route")
 const common = require("./routes/common.route")
 
 app.use("/Provider", provider.default)
+app.use("/Client", client.default)
 app.use("/Common", common.default)
 app.use("/Forms", keycloak.protect(), formsCreated.default)
 app.use("/FormTemplates", keycloak.protect(), formTemplatesRouter.default)
-app.use("/Client", keycloak.protect(), client.default)
 //app.use("/", keycloak.protect(), pdf.default)
 
 const port = process.env.PORT || "8000"

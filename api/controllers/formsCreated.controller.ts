@@ -13,7 +13,14 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
         const formsCreated = await createdForms.getCreatedForms(sorted[0], sorted[1])
         // console.log(formsCreated)
         const params = {
-            fields: "firstName,lastName,caseNumber,token"
+            fields:
+                `
+                firstName,lastName,caseNumber,token,
+                address,cityTown,province,postalCode,telephone,emailAddress,
+                workBcCentreName,workBcCentreAddress,workBcCentreTelephoneNumber,
+                dataGrid,dataGrid1,dataGrid2, 
+                nonExistent
+                `
         }
         let result = formsCreated.content
         formsCreated.content.forEach(async (form: any, i: number) => {

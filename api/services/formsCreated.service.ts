@@ -74,15 +74,27 @@ export const getInitialCreatedFormsByKey = async (formKey: string) => {
 export const getCreatedFormsByKey = async (formKey: string) => {
     let createdForms: any
     try {
-        await db.query("SELECT * FROM FormsCreated_Listing WHERE FormKey = $1 LIMIT 1", [formKey]).then((resp: any) => {
-            // console.log(resp.rows)
+        await db.query("SELECT * FROM FormsCreated WHERE FormKey = $1 LIMIT 1", [formKey]).then((resp: any) => {
+            console.log(resp.rows)
             if (resp.rows.length === 0) {
                 createdForms = {}
             } else {
                 createdForms = {
-                    firstName: resp.rows[0].firstname,
-                    lastName: resp.rows[0].lastname,
-                    caseNumber: resp.rows[0].casenumber
+                    firstName: resp.rows[0].formdata.firstName,
+                    lastName: resp.rows[0].formdata.lastName,
+                    caseNumber: resp.rows[0].formdata.caseNumber,
+                    address: resp.rows[0].formdata.address,
+                    cityTown: resp.rows[0].formdata.cityTown,
+                    province: resp.rows[0].formdata.province,
+                    postalCode: resp.rows[0].formdata.postalCode,
+                    telephone: resp.rows[0].formdata.telephone,
+                    emailAddress: resp.rows[0].formdata.emailAddress,
+                    workBcCentreName: resp.rows[0].formdata.workBcCentreName,
+                    workBcCentreAddress: resp.rows[0].formdata.workBcCentreAddress,
+                    workBcCentreTelephoneNumber: resp.rows[0].formdata.workBcCentreTelephoneNumber,
+                    dataGrid: resp.rows[0].formdata.dataGrid,
+                    dataGrid1: resp.rows[0].formdata.dataGrid1,
+                    dataGrid2: resp.rows[0].formdata.dataGrid2,
                 }
             }
         })
