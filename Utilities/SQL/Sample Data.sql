@@ -29,7 +29,8 @@ INSERT INTO FormsCreated VALUES (
   false, /* IsCreated */
   false, /* IsInICM */
   false, /* IsCompleted */
-  '',
+  '',    /* FormData */
+  'EN', /* FormLanguage */
   'USERA',
    current_timestamp
 );
@@ -55,6 +56,7 @@ INSERT INTO FormsCreated VALUES (
         "lastName": "Testlast",
         "token": "da9b09dd-db16-42bb-ba77-f4af93ac02d9"    
   }',
+  'EN', /* FormLanguage */
   'USERB',
    current_timestamp
 );
