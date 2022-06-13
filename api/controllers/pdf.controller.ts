@@ -1,6 +1,6 @@
 import * as express from "express"
 import axios, { AxiosError, AxiosResponse } from "axios"
-import getToken from "../services/common.service"
+import { getToken } from "../services/common.service"
 
 const generatePDF = async (req: any, res: express.Response) => {
     try {

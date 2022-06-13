@@ -1,18 +1,19 @@
+const format = require("pg-format")
 const db = require("../db/db")
 
 export const getCreatedForms = async (col: string, filter: string) => {
     let createdForms: any
-    if(col === 'id'){col = 'formscreatedid';}
-    var format = require('pg-format');
-    if(filter === 'ASC'){
-        var sql = format('SELECT * FROM FormsCreated_Listing ORDER BY %I ASC', col);
-    } else{
-        var sql = format('SELECT * FROM FormsCreated_Listing ORDER BY %I DESC', col);
+    if (col === "id") { col = "formscreatedid" }
+    let sql
+    if (filter === "ASC") {
+        sql = format("SELECT * FROM FormsCreated_Listing ORDER BY %I ASC", col)
+    } else {
+        sql = format("SELECT * FROM FormsCreated_Listing ORDER BY %I DESC", col)
     }
-    console.log(sql);
+    console.log(sql)
     try {
-        await db.query(sql).then((resp:any) => {
-            console.log(resp.rows)
+        await db.query(sql).then((resp: any) => {
+            // console.log(resp.rows)
             createdForms = {
                 count: resp.rowCount,
                 content: resp.rows.map((t: any) => (
@@ -49,18 +50,51 @@ export const getCreatedForms = async (col: string, filter: string) => {
     return createdForms
 }
 
+export const getInitialCreatedFormsByKey = async (formKey: string) => {
+    let createdForms: any
+    try {
+        await db.query("SELECT * FROM FormsCreated_Listing WHERE FormKey = $1 LIMIT 1", [formKey]).then((resp: any) => {
+            // console.log(resp.rows)
+            if (resp.rows.length === 0) {
+                createdForms = {}
+            } else {
+                createdForms = {
+                    catchment: resp.rows[0].catchmentno,
+                    sf: resp.rows[0].storefrontname,
+                }
+            }
+        })
+    } catch (e: any) {
+        console.error("error while querying: ", e)
+        throw new Error(e.message)
+    }
+    return createdForms
+}
+
 export const getCreatedFormsByKey = async (formKey: string) => {
     let createdForms: any
     try {
-        await db.query("SELECT * FROM FormsCreated_Listing WHERE FormKey = $1 LIMIT 1", [formKey]).then((resp:any) => {
+        await db.query("SELECT * FROM FormsCreated WHERE FormKey = $1 LIMIT 1", [formKey]).then((resp: any) => {
             console.log(resp.rows)
             if (resp.rows.length === 0) {
                 createdForms = {}
             } else {
                 createdForms = {
-                    firstName: resp.rows[0].firstname,
-                    lastName: resp.rows[0].lastname,
-                    caseNumber: resp.rows[0].casenumber
+                    firstName: resp.rows[0].formdata.firstName,
+                    lastName: resp.rows[0].formdata.lastName,
+                    caseNumber: resp.rows[0].formdata.caseNumber,
+                    address: resp.rows[0].formdata.address,
+                    cityTown: resp.rows[0].formdata.cityTown,
+                    province: resp.rows[0].formdata.province,
+                    postalCode: resp.rows[0].formdata.postalCode,
+                    telephone: resp.rows[0].formdata.telephone,
+                    emailAddress: resp.rows[0].formdata.emailAddress,
+                    workBcCentreName: resp.rows[0].formdata.workBcCentreName,
+                    workBcCentreAddress: resp.rows[0].formdata.workBcCentreAddress,
+                    workBcCentreTelephoneNumber: resp.rows[0].formdata.workBcCentreTelephoneNumber,
+                    dataGrid: resp.rows[0].formdata.dataGrid,
+                    dataGrid1: resp.rows[0].formdata.dataGrid1,
+                    dataGrid2: resp.rows[0].formdata.dataGrid2,
                 }
             }
         })
@@ -80,8 +114,8 @@ export const setFormCreated = async (formKey: string, formData: any) => {
               FormData = $1
             WHERE
               FormKey = $2
-            `, [formData, formKey]).then((resp:any) => {
-            console.log(resp)
+            `, [formData, formKey]).then((resp: any) => {
+            // console.log(resp)
         })
     } catch (e: any) {
         console.log(e)
@@ -91,17 +125,13 @@ export const setFormCreated = async (formKey: string, formData: any) => {
 }
 
 export const setFormComplete = async (formKey: string) => {
-    console.log(`UPDATE FormsCreated
-        SET 
-          IsCompleted = true
-        WHERE FormKey = ${formKey}`)
     try {
         await db.query(`
             UPDATE FormsCreated
             SET 
               IsCompleted = true
-            WHERE FormKey = $1`, [formKey]).then((resp:any) => {
-            console.log(resp)
+            WHERE FormKey = $1`, [formKey]).then((resp: any) => {
+            // console.log(resp)
         })
     } catch (e: any) {
         console.log(e)
@@ -128,9 +158,9 @@ export const insertForm = async (formKey: string, formTemplateId: string, catchm
                 $5,   /* User name */
                 current_timestamp
             ) RETURNING id
-            `, [formKey, formTemplateId, catchmentNo, storeFrontName, userName]).then((resp:any) => {
-            console.log("resp is")
-            console.log(resp)
+            `, [formKey, formTemplateId, catchmentNo, storeFrontName, userName]).then((resp: any) => {
+            // console.log("resp is")
+            // console.log(resp)
             id = resp.rows[0].id
         })
     } catch (e: any) {
@@ -138,4 +168,36 @@ export const insertForm = async (formKey: string, formTemplateId: string, catchm
         return false
     }
     return id
+}
+
+export const setFormInICM = async (id: number) => {
+    try {
+        await db.query(`
+            UPDATE FormsCreated
+            SET
+                IsInICM = true
+            WHERE id = $1 AND IsCompleted = true`, [id])
+            .then((resp: any) => {
+                // console.log(resp)
+            })
+    } catch (e: any) {
+        console.log(e)
+        return false
+    }
+    return true
+}
+
+export const deleteForm = async (id: number) => {
+    try {
+        await db.query(`
+            DELETE FROM FormsCreated
+            WHERE id = $1`, [id])
+            .then((resp: any) => {
+                // console.log(resp)
+            })
+    } catch (e: any) {
+        console.log(e)
+        return false
+    }
+    return true
 }
