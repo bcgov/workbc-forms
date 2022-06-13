@@ -33,6 +33,7 @@ CREATE TABLE FormsCreated (
    IsCompleted BOOLEAN NOT NULL,
    FormData JSONB,
    FormLanguage VARCHAR(2),
+   SubmissionId VARCHAR(60),
    CreatedBy VARCHAR(128),
    DateCreated TIMESTAMP NOT NULL
  );
@@ -70,6 +71,7 @@ SELECT
   FormsCreated.IsInICM,
   FormsCreated.IsCompleted,
   FormsCreated.FormLanguage,
+  FormsCreated.SubmissionId,
   FormsCreated.DateCreated,
   FormsCreated.CreatedBy,
   FormsCreated.FormData ->> 'lastName' AS LastName,
