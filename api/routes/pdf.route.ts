@@ -3,6 +3,6 @@ import generatePDF from "../controllers/pdf.controller"
 
 const router = express.Router()
 
-router.get("/pdf/:id", generatePDF)
+router.get("/:id", generatePDF)
 
 export default router

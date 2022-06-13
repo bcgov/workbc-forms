@@ -120,6 +120,8 @@ export const FormCreate = (props: any) => {
         )}
         </FormDataConsumer>
         <FormReferenceInput label="Form" source="code" reference="formTemplates" />
+        <p>Please note that the mobile app will automatically display the form depending on the user's language</p>
+        <SelectInput label="Client Language" source="language" choices={[{id: "EN", name: "English"}, {id: "FR", name: "French"}]} />
       </SimpleForm>
     </Create>
     :

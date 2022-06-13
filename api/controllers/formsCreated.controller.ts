@@ -53,11 +53,12 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
                 const clientSubmissions = await submissionService.getFormSubmissions(clientId, formsCreated.keys[i].clientApiKey, params)
                 // console.log(clientSubmissions)
                 const clientForm = clientSubmissions.find((s: any) => s.token === form.key) || null
+                // console.log(clientForm)
                 // update client form
                 if (clientForm) {
                     // console.log("updating client DB entry")
                     // console.log(form.key)
-                    const updated = await createdForms.setFormComplete(form.key)
+                    const updated = await createdForms.setFormComplete(form.key, clientForm.submissionId)
                     if (updated) {
                         result[i].isCompleted = true
                     }
@@ -97,7 +98,8 @@ export const getFormsCreated = async (req: any, res: express.Response) => {
 export const createForm = async (req: any, res: express.Response) => {
     try {
         const created =
-                    await createdForms.insertForm(req.body.formKey, req.body.code, req.body.catchment, req.body.storefront, req.body.userName)
+                    // eslint-disable-next-line max-len
+                    await createdForms.insertForm(req.body.formKey, req.body.code, req.body.catchment, req.body.storefront, req.body.userName, req.body.language)
         console.log("created is")
         console.log(created)
         if (created) {
