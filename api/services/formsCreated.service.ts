@@ -184,8 +184,8 @@ export const insertForm = async (formKey: string, formTemplateId: string, catchm
                 false, /* IsCompleted */
                 null,  /* FormData */
                 $5,   /* User name */
-                $6, /* Language */
-                current_timestamp
+                current_timestamp,
+                $6 /* Language */
             ) RETURNING id
             `, [formKey, formTemplateId, catchmentNo, storeFrontName, userName, language]).then((resp: any) => {
             // console.log("resp is")
