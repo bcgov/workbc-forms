@@ -32,7 +32,8 @@ export const getCreatedForms = async (col: string, filter: string) => {
                         firstName: t.firstname,
                         lastName: t.lastname,
                         clientUrl: t.clienturl,
-                        providerUrl: t.providerurl
+                        providerUrl: t.providerurl,
+                        language: t.formlanguage
                     }
                 )),
                 keys: resp.rows.map((t: any) => (
@@ -74,15 +75,52 @@ export const getInitialCreatedFormsByKey = async (formKey: string) => {
 export const getCreatedFormsByKey = async (formKey: string) => {
     let createdForms: any
     try {
-        await db.query("SELECT * FROM FormsCreated_Listing WHERE FormKey = $1 LIMIT 1", [formKey]).then((resp: any) => {
-            // console.log(resp.rows)
+        await db.query("SELECT * FROM FormsCreated WHERE FormKey = $1 LIMIT 1", [formKey]).then((resp: any) => {
+            console.log(resp.rows)
             if (resp.rows.length === 0) {
                 createdForms = {}
             } else {
                 createdForms = {
-                    firstName: resp.rows[0].firstname,
-                    lastName: resp.rows[0].lastname,
-                    caseNumber: resp.rows[0].casenumber
+                    firstName: resp.rows[0].formdata.firstName,
+                    lastName: resp.rows[0].formdata.lastName,
+                    caseNumber: resp.rows[0].formdata.caseNumber,
+                    address: resp.rows[0].formdata.address,
+                    cityTown: resp.rows[0].formdata.cityTown,
+                    province: resp.rows[0].formdata.province,
+                    postalCode: resp.rows[0].formdata.postalCode,
+                    telephone: resp.rows[0].formdata.telephone,
+                    emailAddress: resp.rows[0].formdata.emailAddress,
+                    workBcCentreName: resp.rows[0].formdata.workBcCentreName,
+                    workBcCentreAddress: resp.rows[0].formdata.workBcCentreAddress,
+                    workBcCentreTelephoneNumber: resp.rows[0].formdata.workBcCentreTelephoneNumber,
+                    dataGrid: resp.rows[0].formdata.dataGrid,
+                    dataGrid1: resp.rows[0].formdata.dataGrid1,
+                    dataGrid2: resp.rows[0].formdata.dataGrid2,
+                }
+            }
+        })
+    } catch (e: any) {
+        console.error("error while querying: ", e)
+        throw new Error(e.message)
+    }
+    return createdForms
+}
+
+export const getCreatedFormsSubmission = async (formKey: string) => {
+    let createdForms: any
+    try {
+        await db.query("SELECT * FROM FormsCreated_Listing WHERE FormKey = $1 LIMIT 1", [formKey]).then((resp: any) => {
+            console.log(resp.rows)
+            if (resp.rows.length === 0) {
+                createdForms = {}
+            } else {
+                createdForms = {
+                    clientApiKey: resp.rows[0].clientapikey,
+                    clientUrl: resp.rows[0].clienturl,
+                    pdfHash: resp.rows[0].pdfhash,
+                    pdfHashFR: resp.rows[0].pdfhashfr,
+                    formLanguage: resp.rows[0].formlanguage,
+                    clientSubmissionId: resp.rows[0].submissionid
                 }
             }
         })
@@ -112,13 +150,14 @@ export const setFormCreated = async (formKey: string, formData: any) => {
     return true
 }
 
-export const setFormComplete = async (formKey: string) => {
+export const setFormComplete = async (formKey: string, submissionId: string) => {
     try {
         await db.query(`
             UPDATE FormsCreated
             SET 
-              IsCompleted = true
-            WHERE FormKey = $1`, [formKey]).then((resp: any) => {
+              IsCompleted = true,
+              SubmissionId = $1
+            WHERE FormKey = $2`, [submissionId, formKey]).then((resp: any) => {
             // console.log(resp)
         })
     } catch (e: any) {
@@ -128,7 +167,8 @@ export const setFormComplete = async (formKey: string) => {
     return true
 }
 
-export const insertForm = async (formKey: string, formTemplateId: string, catchmentNo: string, storeFrontName: string, userName: string) => {
+// eslint-disable-next-line max-len
+export const insertForm = async (formKey: string, formTemplateId: string, catchmentNo: string, storeFrontName: string, userName: string, language: string) => {
     let id: any
     try {
         await db.query(`
@@ -144,9 +184,10 @@ export const insertForm = async (formKey: string, formTemplateId: string, catchm
                 false, /* IsCompleted */
                 null,  /* FormData */
                 $5,   /* User name */
-                current_timestamp
+                current_timestamp,
+                $6 /* Language */
             ) RETURNING id
-            `, [formKey, formTemplateId, catchmentNo, storeFrontName, userName]).then((resp: any) => {
+            `, [formKey, formTemplateId, catchmentNo, storeFrontName, userName, language]).then((resp: any) => {
             // console.log("resp is")
             // console.log(resp)
             id = resp.rows[0].id
@@ -156,4 +197,36 @@ export const insertForm = async (formKey: string, formTemplateId: string, catchm
         return false
     }
     return id
+}
+
+export const setFormInICM = async (id: number) => {
+    try {
+        await db.query(`
+            UPDATE FormsCreated
+            SET
+                IsInICM = true
+            WHERE id = $1 AND IsCompleted = true`, [id])
+            .then((resp: any) => {
+                // console.log(resp)
+            })
+    } catch (e: any) {
+        console.log(e)
+        return false
+    }
+    return true
+}
+
+export const deleteForm = async (id: number) => {
+    try {
+        await db.query(`
+            DELETE FROM FormsCreated
+            WHERE id = $1`, [id])
+            .then((resp: any) => {
+                // console.log(resp)
+            })
+    } catch (e: any) {
+        console.log(e)
+        return false
+    }
+    return true
 }
